@@ -1,0 +1,3 @@
+ALTER TABLE categories
+ALTER COLUMN id
+DROP DEFAULT;
