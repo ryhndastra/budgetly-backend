@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:17
+
+    container_name: budgetly_postgres
+
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: budgetly
+      POSTGRES_PASSWORD: budgetly
+      POSTGRES_DB: budgetly
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
