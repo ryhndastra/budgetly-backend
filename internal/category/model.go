@@ -12,5 +12,6 @@ type Category struct {
 	Name      string    `json:"name"`
 	Icon      string    `json:"icon"`
 	Color     string    `json:"color"`
+	Type 			string 		`json:"type"`
 	CreatedAt time.Time `json:"created_at"`
 }

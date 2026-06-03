@@ -28,6 +28,7 @@ func (r *Repository) GetByUserID(
 			name,
 			icon,
 			color,
+			type,
 			created_at
 		FROM categories
 		WHERE user_id = $1
@@ -52,12 +53,13 @@ func (r *Repository) GetByUserID(
 		var category Category
 
 		err := rows.Scan(
-			&category.ID,
-			&category.UserID,
-			&category.Name,
-			&category.Icon,
-			&category.Color,
-			&category.CreatedAt,
+				&category.ID,
+				&category.UserID,
+				&category.Name,
+				&category.Icon,
+				&category.Color,
+				&category.Type,
+				&category.CreatedAt,
 		)
 
 		if err != nil {
