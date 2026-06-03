@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 
+	"budgetly-backend/internal/category"
 	"budgetly-backend/internal/config"
 	"budgetly-backend/internal/database"
 	"budgetly-backend/internal/transaction"
@@ -46,6 +47,16 @@ func main() {
 		transactionService,
 	)
 
+	categoryRepo := category.NewRepository(db)
+
+	categoryService := category.NewService(
+		categoryRepo,
+	)
+
+	categoryHandler := category.NewHandler(
+		categoryService,
+	)
+
 	api := router.Group("/api")
 
 	transactionGroup := api.Group("/transactions")
@@ -53,6 +64,13 @@ func main() {
 	transactionHandler.RegisterRoutes(
 		transactionGroup,
 	)
+
+	categoryGroup := api.Group("/categories")
+
+	categoryHandler.RegisterRoutes(
+		categoryGroup,
+	)
+
 
 	router.GET(
 		"/health",
