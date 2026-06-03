@@ -6,6 +6,7 @@ import (
 
 	"budgetly-backend/internal/config"
 	"budgetly-backend/internal/database"
+	"budgetly-backend/internal/transaction"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -34,6 +35,24 @@ func main() {
 	defer db.Close(nil)
 
 	router := gin.Default()
+
+	transactionRepo := transaction.NewRepository(db)
+
+	transactionService := transaction.NewService(
+		transactionRepo,
+	)
+
+	transactionHandler := transaction.NewHandler(
+		transactionService,
+	)
+
+	api := router.Group("/api")
+
+	transactionGroup := api.Group("/transactions")
+
+	transactionHandler.RegisterRoutes(
+		transactionGroup,
+	)
 
 	router.GET(
 		"/health",
