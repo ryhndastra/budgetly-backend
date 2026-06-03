@@ -3,6 +3,7 @@ package transaction
 import (
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -58,4 +59,66 @@ func (r *Repository) Create(
 	}
 
 	return transaction, nil
+}
+
+func (r *Repository) GetByUserID(
+	userID uuid.UUID,
+) ([]Transaction, error) {
+
+	query := `
+		SELECT
+			id,
+			user_id,
+			category_id,
+			title,
+			amount,
+			note,
+			type,
+			created_at,
+			updated_at
+		FROM transactions
+		WHERE user_id = $1
+		ORDER BY created_at DESC
+	`
+
+	rows, err := r.db.Query(
+		context.Background(),
+		query,
+		userID,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	var transactions []Transaction
+
+	for rows.Next() {
+		var transaction Transaction
+
+		err := rows.Scan(
+			&transaction.ID,
+			&transaction.UserID,
+			&transaction.CategoryID,
+			&transaction.Title,
+			&transaction.Amount,
+			&transaction.Note,
+			&transaction.Type,
+			&transaction.CreatedAt,
+			&transaction.UpdatedAt,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		transactions = append(
+			transactions,
+			transaction,
+		)
+	}
+
+	return transactions, nil
 }

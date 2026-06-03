@@ -3,6 +3,8 @@ package transaction
 import (
 	"errors"
 	"strings"
+
+	"github.com/google/uuid"
 )
 
 type Service struct {
@@ -35,4 +37,10 @@ func (s *Service) Create(
 	}
 
 	return s.repo.Create(transaction)
+}
+
+func (s *Service) GetByUserID(
+	userID uuid.UUID,
+) ([]Transaction, error) {
+	return s.repo.GetByUserID(userID)
 }
